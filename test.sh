@@ -6,7 +6,7 @@ main(_) ->
         start()
     catch
         ErrT:Err ->
-			io:format("[ERROR] ~p : ~p~n", [ErrT, Err]),
+            io:format("[ERROR] ~p : ~p~n", [ErrT, Err]),
             usage()
     end;
 main(_) ->
@@ -21,19 +21,19 @@ start() ->
    server(4000).
 
 server(Port) ->
-	Opts = [
-		{cacertfile, "./certs/fullchain1.pem"},
-		{certfile, "./certs/cert1.pem"},
-		{keyfile, "./certs/privkey1.pem"},
-		{secure_renegotiate, true},
-		{client_renegotiation, true},
-		%% NB this works:
+    Opts = [
+        {cacertfile, "./certs/fullchain1.pem"},
+        {certfile, "./certs/cert1.pem"},
+        {keyfile, "./certs/privkey1.pem"},
+        {secure_renegotiate, true},
+        {client_renegotiation, true},
+        %% NB this works:
         {versions, ['tlsv1.2','tlsv1.3']},
-		%% NB this does not work:
-		% {versions, ['tlsv1.3']},
-		{reuseaddr, true},
-		{active, false}
-	],
+        %% NB this does not work:
+        % {versions, ['tlsv1.3']},
+        {reuseaddr, true},
+        {active, false}
+    ],
     {ok, LSocket} = ssl:listen(Port, Opts),
     accept(LSocket).
     
