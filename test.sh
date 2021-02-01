@@ -22,13 +22,15 @@ start() ->
 
 server(Port) ->
 	Opts = [
-		{cacertfile, "/home/lbakken/issues/rabbitmq-users/tls-connections-dropping-lquxjze8UIc/vagrant/invalidtest.mohag.za.net/fullchain1.pem"},
-		{certfile, "/home/lbakken/issues/rabbitmq-users/tls-connections-dropping-lquxjze8UIc/vagrant/invalidtest.mohag.za.net/cert1.pem"},
-		{keyfile, "/home/lbakken/issues/rabbitmq-users/tls-connections-dropping-lquxjze8UIc/vagrant/invalidtest.mohag.za.net/privkey1.pem"},
+		{cacertfile, "./certs/fullchain1.pem"},
+		{certfile, "./certs/cert1.pem"},
+		{keyfile, "./certs/privkey1.pem"},
 		{secure_renegotiate, true},
 		{client_renegotiation, true},
-		%% NB this works: {versions, ['tlsv1.2','tlsv1.3']},
-		{versions, ['tlsv1.3']},
+		%% NB this works:
+        {versions, ['tlsv1.2','tlsv1.3']},
+		%% NB this does not work:
+		% {versions, ['tlsv1.3']},
 		{reuseaddr, true},
 		{active, false}
 	],
