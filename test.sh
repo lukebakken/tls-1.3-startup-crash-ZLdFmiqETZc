@@ -1,6 +1,6 @@
 #!/usr/bin/env escript
 %% -*- erlang -*-
-%%! -smp enable -sname ERL539
+%%! -smp enable -sname tls-test
 main(_) ->
     try
         start()
@@ -13,7 +13,7 @@ main(_) ->
     usage().
 
 usage() ->
-    io:format("usage: repro\n"),
+    io:format("usage: test.sh\n"),
     halt(1).
 
 start() ->
@@ -22,9 +22,13 @@ start() ->
 
 server(Port) ->
 	Opts = [
-		{cacertfile, "/FOOBAR/home/lbakken/development/michaelklishin/tls-gen/basic/result/ca_certificate.pem"},
-		{certfile, "/home/lbakken/development/michaelklishin/tls-gen/basic/result/server_certificate.pem"},
-		{keyfile, "/home/lbakken/development/michaelklishin/tls-gen/basic/result/server_key.pem"},
+		{cacertfile, "/home/lbakken/issues/rabbitmq-users/tls-connections-dropping-lquxjze8UIc/vagrant/invalidtest.mohag.za.net/fullchain1.pem"},
+		{certfile, "/home/lbakken/issues/rabbitmq-users/tls-connections-dropping-lquxjze8UIc/vagrant/invalidtest.mohag.za.net/cert1.pem"},
+		{keyfile, "/home/lbakken/issues/rabbitmq-users/tls-connections-dropping-lquxjze8UIc/vagrant/invalidtest.mohag.za.net/privkey1.pem"},
+		{secure_renegotiate, true},
+		{client_renegotiation, true},
+		%% NB this works: {versions, ['tlsv1.2','tlsv1.3']},
+		{versions, ['tlsv1.3']},
 		{reuseaddr, true},
 		{active, false}
 	],
@@ -35,7 +39,7 @@ accept(LSocket) ->
    {ok, Socket} = ssl:transport_accept(LSocket),
    F = fun() ->
                try
-                   ok = ssl:ssl_accept(Socket)
+                   ok = ssl:ssl_handshake(Socket)
                catch
                    ErrT:Err ->
                        io:format("[ERROR] ssl:ssl_accept ~p : ~p~n", [ErrT, Err])
